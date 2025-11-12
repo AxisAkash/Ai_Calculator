@@ -1,0 +1,573 @@
+/* =========================
+   Global / Theme
+   ========================= */
+:root {
+  --bg: #0f1420;
+  --card: #111827;
+  --text: #e6f0ff;
+  --muted: #9ba3b0;
+  --accent: #35f2e3;
+  --accent2: #8be7ff;
+  --radius: 16px;
+  --shadow: 0 10px 40px rgba(0,0,0,.45);
+  --transition: 0.25s ease;
+  color-scheme: dark; /* prefer dark form controls where supported */
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  height: 100%;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  overflow: hidden;
+}
+
+/* =========================
+   App Layout (65% / 35%)
+   ========================= */
+.app-wrapper {
+  display: grid;
+  grid-template-columns: 65% 35%;
+  height: 100vh;
+}
+
+.left-panel {
+  display: flex;
+  flex-direction: column;
+  padding: 20px 24px;
+  background:
+    radial-gradient(1000px 600px at 20% 0, rgba(53,242,227,.10), transparent 70%),
+    var(--bg);
+}
+
+.app-header { text-align: center; margin-bottom: 16px; }
+.app-header h1 {
+  font-size: 2rem;
+  letter-spacing: .5px;
+  color: var(--accent);
+  text-shadow: 0 0 24px rgba(53,242,227,.4);
+}
+.subtitle { color: var(--muted); font-size: .9rem; }
+/* Reuse if you already have it */
+.hidden { display: none; }
+
+/* Gradient pill CTA */
+.download-cta {
+  --glow: rgba(53, 242, 227, 0.35);
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 18px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.08);
+  background: linear-gradient(135deg, #7af3ff 0%, #7a86ff 50%, #b879ff 100%);
+  color: #06101c;
+  font-weight: 700;
+  letter-spacing: .2px;
+  box-shadow:
+    0 10px 24px rgba(0,0,0,.25),
+    0 0 30px var(--glow) inset;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  cursor: pointer;
+  transition: transform .15s ease, box-shadow .2s ease, opacity .2s;
+}
+
+/* Icon inside the pill */
+.download-cta .icon {
+  width: 20px; height: 20px;
+  stroke: #06101c; fill: none; stroke-width: 2;
+}
+
+/* Hover/active/focus states */
+.download-cta:hover { transform: translateY(-1px); }
+.download-cta:active { transform: translateY(0); }
+.download-cta:focus-visible {
+  outline: 2px solid #35f2e3;
+  outline-offset: 3px;
+}
+
+/* Optional fixed placement (bottom-right) */
+@media (min-width: 600px) {
+  #installBtn {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    z-index: 40;
+  }
+}
+
+/* Tabs */
+.tabs {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+.tab {
+  background: rgba(255,255,255,.05);
+  border: none;
+  color: var(--muted);
+  padding: 8px 14px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: var(--transition);
+}
+.tab.active {
+  background: rgba(53,242,227,.15);
+  color: var(--text);
+  box-shadow: 0 0 10px rgba(53,242,227,.4);
+}
+
+/* Panels */
+.panel { display: none; animation: fade .2s ease; }
+.panel.active { display: block; }
+@keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+
+/* =========================
+   Standard / Scientific
+   ========================= */
+.display { margin-bottom: 10px; }
+.display input {
+  width: 100%;
+  padding: 16px 18px;
+  border-radius: 12px;
+  border: none;
+  font-size: 1.25rem;
+  background: rgba(255,255,255,.06);
+  color: var(--text);
+  text-align: right;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.08);
+}
+
+/* Grids */
+.keypad { display: grid; gap: 14px; }
+.grid-4 { grid-template-columns: repeat(4, 1fr); }
+.grid-5 { grid-template-columns: repeat(5, 1fr); }
+
+/* =========================
+   Buttons — Enhanced
+   ========================= */
+.keypad button {
+  height: 75px;                  /* bigger */
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,.15);
+  background: linear-gradient(145deg, rgba(255,255,255,.06), rgba(0,0,0,.15));
+  color: var(--text);
+  font-size: 1.25rem;            /* bigger text */
+  font-weight: 500;
+  cursor: pointer;
+  box-shadow:
+    inset 0 0 8px rgba(0,0,0,.3),
+    0 6px 22px rgba(0,0,0,.45);
+  transition: transform .15s ease, background .2s ease, box-shadow .2s ease;
+}
+
+.keypad button:hover {
+  background: rgba(53,242,227,.12);
+  box-shadow: 0 0 18px rgba(53,242,227,.35);
+  transform: translateY(-1px) scale(1.03);
+}
+.keypad button:active {
+  transform: translateY(0) scale(.97);
+  background: rgba(53,242,227,.22);
+}
+
+/* Operators (÷ × − + C) */
+.keypad button.op {
+  background: linear-gradient(145deg, rgba(53,242,227,.18), rgba(139,231,255,.06));
+  border: 1px solid rgba(53,242,227,.35);
+  font-weight: 700;
+  letter-spacing: .25px;
+  box-shadow:
+    inset 0 0 10px rgba(53,242,227,.25),
+    0 10px 28px rgba(53,242,227,.18);
+}
+
+/* Make the PLUS key visually dominant (give this button class="op key-plus") */
+.keypad button.key-plus {
+  font-size: 1.6rem;
+  box-shadow:
+    inset 0 0 14px rgba(53,242,227,.35),
+    0 0 28px rgba(53,242,227,.45);
+  position: relative;
+}
+.keypad button.key-plus::after {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  border-radius: inherit;
+  pointer-events: none;
+  background: radial-gradient(600px 120px at 50% 120%, rgba(53,242,227,.35), transparent 60%);
+  opacity: .7;
+}
+
+/* Equal button — CTA style */
+.equal {
+  grid-column: span 4;
+  height: 84px;
+  border-radius: 16px;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  color: #000;
+  font-size: 1.55rem;
+  font-weight: 800;
+  letter-spacing: .25px;
+  box-shadow: 0 0 25px rgba(53,242,227,.55), 0 10px 30px rgba(0,0,0,.35);
+  transition: transform .2s ease, box-shadow .25s ease;
+}
+.equal:hover {
+  box-shadow: 0 0 42px rgba(53,242,227,.85), 0 14px 36px rgba(0,0,0,.45);
+  transform: translateY(-1px) scale(1.02);
+}
+.equal:active { transform: translateY(0) scale(.99); }
+
+/* Utility sizes (use if you want taller/wider keys) */
+.key--tall { grid-row: span 2; height: 164px; }     /* needs grid rows tall enough in HTML */
+.key--wide { grid-column: span 2; }
+
+/* =========================
+   Optional Second Number Pad
+   ========================= */
+/* Render a second pad container with class="keypad grid-4 aux-pad" */
+.aux-pad {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px dashed rgba(255,255,255,.12);
+}
+.aux-pad button {
+  height: 68px;
+  font-size: 1.1rem;
+}
+.aux-pad .op {
+  background: linear-gradient(145deg, rgba(53,242,227,.14), rgba(139,231,255,.05));
+  border: 1px solid rgba(53,242,227,.28);
+}
+
+/* =========================
+   Converter
+   ========================= */
+/* =========================
+   Converter — Redesigned Glass Card
+   ========================= */
+.converter {
+  display: grid;
+  gap: 10px;
+}
+
+.conv-card {
+  position: relative;
+  padding: 16px;
+  border-radius: var(--radius);
+  background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03)), rgba(255,255,255,.04);
+  border: 1px solid rgba(255,255,255,.1);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.conv-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+.conv-head h3 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: .2px;
+  color: var(--text);
+  text-shadow: 0 0 14px rgba(53,242,227,.25);
+}
+.conv-edge {
+  width: 52px;
+  height: 8px;
+  border-radius: 999px;
+  opacity: .8;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  box-shadow: 0 0 18px rgba(53,242,227,.55);
+}
+
+.conv-row {
+  display: grid;
+  gap: 10px;
+}
+.conv-pair {
+  grid-template-columns: 1fr auto 1fr;
+  align-items: end;
+}
+.conv-actions {
+  margin-top: 6px;
+}
+
+.conv-box {
+  display: grid;
+  gap: 6px;
+}
+.conv-label {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.conv-inputset {
+  display: grid;
+  gap: 8px;
+  grid-template-columns: 1fr minmax(140px, 220px);
+}
+.conv-inputset input {
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,.12);
+  background: rgba(255,255,255,.05);
+  color: var(--text);
+}
+
+.conv-select-wrap {
+  position: relative;
+}
+
+/* Swap button */
+.conv-swap {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,.16);
+  background: linear-gradient(145deg, rgba(255,255,255,.08), rgba(0,0,0,.18));
+  color: var(--text);
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  font-size: 1.1rem;
+  font-weight: 800;
+  box-shadow:
+    inset 0 0 10px rgba(0,0,0,.25),
+    0 10px 26px rgba(0,0,0,.35);
+  transition: transform .18s ease, box-shadow .2s ease, background .2s ease;
+}
+.conv-swap:hover {
+  background: rgba(53,242,227,.14);
+  box-shadow: 0 0 18px rgba(53,242,227,.40);
+}
+.conv-swap:active {
+  transform: scale(.96);
+}
+.conv-swap.spin {
+  animation: convSpin .35s ease;
+}
+@keyframes convSpin {
+  to { transform: rotate(360deg); }
+}
+
+/* Toast */
+.conv-toast {
+  position: absolute;
+  right: 14px;
+  bottom: 14px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .2px;
+  color: #000;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  box-shadow: 0 8px 22px rgba(0,0,0,.35), 0 0 18px rgba(53,242,227,.45);
+  opacity: 0;
+  transform: translateY(6px);
+  pointer-events: none;
+}
+.conv-toast.show {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity .18s ease, transform .18s ease;
+}
+
+/* Responsive */
+@media (max-width: 960px) {
+  .conv-inputset {
+    grid-template-columns: 1fr;
+  }
+  .conv-pair {
+    grid-template-columns: 1fr auto;
+  }
+}
+
+/* =========================
+   AI Panel
+   ========================= */
+.ai-panel { display: flex; flex-direction: column; gap: 10px; }
+.ai-panel h2 { color: var(--accent); font-size: 1.4rem; }
+
+.ai-controls {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(120px, 1fr));
+  gap: 10px;
+  align-items: end;
+  margin-bottom: 10px;
+}
+.ai-controls label { display: grid; gap: 6px; }
+.ai-controls label span { font-size: 12px; color: var(--muted); }
+
+#aiInput {
+  width: 100%;
+  min-height: 140px;
+  resize: vertical;
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,.1);
+  background: rgba(255,255,255,.05);
+  color: var(--text);
+  font-size: 1rem;
+}
+
+.muted { color: var(--muted); font-size: .95rem; }
+.ai-buttons { display: flex; gap: 10px; }
+
+.btn {
+  border: none; border-radius: 10px; cursor: pointer;
+  padding: 10px 14px; font-weight: 500; transition: var(--transition);
+}
+.btn.primary { background: linear-gradient(90deg,var(--accent),var(--accent2)); color: #000; }
+.btn.ghost   { background: rgba(255,255,255,.06); color: var(--text); }
+.btn:hover   { opacity: .9; }
+
+/* =========================
+   Right Panel (35%)
+   ========================= */
+.right-panel {
+  background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(0,0,0,.15)), var(--card);
+  border-left: 1px solid rgba(255,255,255,.08);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.output { display: flex; flex-direction: column; gap: 18px; }
+.result-card, .steps-card, .notes-card {
+  background: rgba(255,255,255,.04);
+  border-radius: var(--radius);
+  padding: 16px; box-shadow: var(--shadow);
+}
+.result-card h2 { color: var(--accent); margin-bottom: 6px; }
+#resultOutput { font-size: 2rem; font-family: monospace; color: var(--text); }
+
+.steps-card pre {
+  background: rgba(0,0,0,.25);
+  border-radius: 10px;
+  padding: 10px;
+  overflow-y: auto;
+  max-height: 40vh;
+  line-height: 1.4;
+}
+.notes-card { color: var(--muted); font-size: .95rem; }
+
+/* =========================
+   Floating PWA Install
+   ========================= */
+.install-fab {
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  z-index: 9999;
+  padding: 10px 14px;
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
+  font-weight: 600;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  color: #000;
+  box-shadow: 0 10px 30px rgba(0,0,0,.35);
+}
+.install-fab.hidden { display: none; }
+
+/* =========================
+   Custom Select (Dark)
+   ========================= */
+select.native-select {
+  position: absolute !important;
+  left: -99999px !important;
+  width: 0 !important;
+  height: 0 !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+.selectbox {
+  position: relative;
+  display: inline-block;
+  min-width: 140px;
+}
+
+.selectbox__button {
+  width: 100%;
+  padding: 10px 36px 10px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,.12);
+  background: rgba(255,255,255,.06);
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  cursor: pointer;
+}
+.selectbox__button:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(53,242,227,.35);
+}
+
+.selectbox__icon {
+  pointer-events: none;
+  margin-left: 10px;
+  width: 18px;
+  height: 18px;
+  opacity: .8;
+}
+
+.selectbox__list {
+  position: absolute;
+  left: 0; right: 0; top: calc(100% + 6px);
+  background: #0b1120;
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 10px;
+  box-shadow: 0 20px 50px rgba(0,0,0,.45);
+  max-height: 240px;
+  overflow: auto;
+  padding: 6px;
+  z-index: 9999;
+  display: none;
+  list-style: none;
+  margin: 0;
+}
+
+.selectbox.open .selectbox__list { display: block; }
+
+.selectbox__option {
+  list-style: none;
+  padding: 8px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  color: var(--text);
+}
+.selectbox__option:hover { background: rgba(255,255,255,.08); }
+.selectbox__option[aria-selected="true"] {
+  background: rgba(53,242,227,.18);
+  border: 1px solid rgba(53,242,227,.35);
+}
+
+/* =========================
+   Responsive (stack)
+   ========================= */
+@media (max-width: 1020px) {
+  .app-wrapper { grid-template-columns: 1fr; overflow-y: auto; }
+  .right-panel { border-left: none; }
+  .keypad button { height: 70px; font-size: 1.15rem; }
+  .equal { height: 76px; }
+}
+@media (max-width: 420px) {
+  .keypad { gap: 10px; }
+  .keypad button { height: 64px; font-size: 1.05rem; }
+  .equal { height: 70px; font-size: 1.25rem; }
+}

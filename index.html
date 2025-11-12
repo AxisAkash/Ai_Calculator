@@ -1,0 +1,270 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AI Calculator + Smart Solver</title>
+
+  <!-- PWA -->
+  <meta name="theme-color" content="#35f2e3" />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="icon" href="icons/icon-192.png" />
+
+  <!-- Styles & Chart.js -->
+  <link rel="stylesheet" href="style.css?v=4" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+  <div class="app-wrapper">
+    <!-- ============ LEFT (65%) ============ -->
+    <section class="left-panel">
+      <header class="app-header">
+        <h1>AI Calculator</h1>
+        <p class="subtitle">Standard • Scientific • Converter • AI</p>
+      </header>
+
+      <!-- Tabs -->
+      <nav class="tabs">
+        <button class="tab active" data-tab="standard">Standard</button>
+        <button class="tab" data-tab="scientific">Scientific</button>
+        <button class="tab" data-tab="converter">Converter</button>
+        <button class="tab" data-tab="ai">AI Mode</button>
+      </nav>
+
+      <!-- Shared Display -->
+      <div class="display" aria-label="Calculator display">
+        <input id="displayInput" type="text" placeholder="0" />
+      </div>
+
+      <main id="calc-panels">
+        <!-- ===== Standard ===== -->
+        <section id="panel-standard" class="panel active" aria-labelledby="tab-standard">
+          <div class="keypad grid-4" aria-label="Standard keypad">
+            <button data-key="7">7</button>
+            <button data-key="8">8</button>
+            <button data-key="9">9</button>
+            <button class="op" data-key="÷">÷</button>
+
+            <button data-key="4">4</button>
+            <button data-key="5">5</button>
+            <button data-key="6">6</button>
+            <button class="op" data-key="×">×</button>
+
+            <button data-key="1">1</button>
+            <button data-key="2">2</button>
+            <button data-key="3">3</button>
+            <button class="op" data-key="-">−</button>
+
+            <button data-key="0">0</button>
+            <button data-key=".">.</button>
+            <button class="op" data-key="C">C</button>
+            <button class="op key-plus" data-key="+">+</button>
+
+            <button class="equal" data-key="=">=</button>
+          </div>
+        </section>
+
+        <!-- ===== Scientific ===== -->
+        <section id="panel-scientific" class="panel" aria-labelledby="tab-scientific">
+          <div class="ai-controls" style="grid-template-columns: 1fr; margin-bottom: 8px;">
+            <label style="display:flex; gap:.6rem; align-items:center">
+              <input id="degToggle" type="checkbox" checked />
+              <span class="muted">Degrees (uncheck = Radians)</span>
+            </label>
+          </div>
+
+          <!-- Scientific functions -->
+          <div class="keypad grid-5" aria-label="Scientific keypad">
+            <button class="op" data-key="sin(">sin</button>
+            <button class="op" data-key="cos(">cos</button>
+            <button class="op" data-key="tan(">tan</button>
+            <button class="op" data-key="asin(">asin</button>
+            <button class="op" data-key="acos(">acos</button>
+
+            <button class="op" data-key="atan(">atan</button>
+            <button class="op" data-key="ln(">ln</button>
+            <button class="op" data-key="log(">log</button>
+            <button class="op" data-key="exp(">exp</button>
+            <button class="op" data-key="√(">√</button>
+
+            <button class="op" data-key="^">^</button>
+            <button class="op" data-key="π">π</button>
+            <button class="op" data-key="e">e</button>
+            <button data-key="(">(</button>
+            <button data-key=")">)</button>
+
+            <button class="op" data-key="!">!</button>
+            <button class="op" data-key="%">%</button>
+            <button class="op" data-key="^2">x²</button>
+            <button class="op" data-key="^3">x³</button>
+            <button class="op" data-key="+">+</button>
+          </div>
+
+          <!-- Scientific number pad -->
+          <div class="keypad grid-5 aux-pad" aria-label="Scientific number pad">
+            <button data-key="7">7</button>
+            <button data-key="8">8</button>
+            <button data-key="9">9</button>
+            <button class="op" data-key="÷">÷</button>
+            <button class="op" data-key="C">C</button>
+
+            <button data-key="4">4</button>
+            <button data-key="5">5</button>
+            <button data-key="6">6</button>
+            <button class="op" data-key="×">×</button>
+            <button class="op" data-key="⌫">⌫</button>
+
+            <button data-key="1">1</button>
+            <button data-key="2">2</button>
+            <button data-key="3">3</button>
+            <button class="op" data-key="-">−</button>
+            <button class="equal" data-key="=">=</button>
+
+            <button class="key--wide" data-key="0">0</button>
+            <button data-key=".">.</button>
+            <button class="op" data-key="+">+</button>
+          </div>
+        </section>
+
+        <!-- ===== Converter (Redesigned) ===== -->
+        <section id="panel-converter" class="panel" aria-labelledby="tab-converter">
+          <div class="converter">
+            <div class="conv-card">
+              <header class="conv-head">
+                <h3>Converter</h3>
+                <span class="conv-edge"></span>
+              </header>
+
+              <div class="conv-row">
+                <label class="conv-field">
+                  <span class="conv-label">Category</span>
+                  <select id="convCategory" class="native-select" data-enhance="custom-select"></select>
+                </label>
+              </div>
+
+              <div class="conv-row conv-pair">
+                <div class="conv-box">
+                  <span class="conv-label">From</span>
+                  <div class="conv-inputset">
+                    <input id="fromValue" type="number" placeholder="Enter value" />
+                    <div class="conv-select-wrap">
+                      <select id="fromUnit" class="native-select" data-enhance="custom-select"></select>
+                    </div>
+                  </div>
+                </div>
+
+                <button id="convSwap" class="conv-swap" aria-label="Swap units and values" title="Swap">↻</button>
+
+                <div class="conv-box">
+                  <span class="conv-label">To</span>
+                  <div class="conv-inputset">
+                    <input id="toValue" type="text" placeholder="Result" readonly />
+                    <div class="conv-select-wrap">
+                      <select id="toUnit" class="native-select" data-enhance="custom-select"></select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="conv-row conv-actions">
+                <button id="convertBtn" class="btn primary">Convert</button>
+              </div>
+
+              <div id="convSwapToast" class="conv-toast">Swapped!</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===== AI Mode ===== -->
+        <section id="panel-ai" class="panel" aria-labelledby="tab-ai">
+          <div class="ai-panel">
+            <h2>Smart Solver • Problem Generator</h2>
+
+            <div class="ai-controls">
+              <label>
+                <span>Class</span>
+                <select id="clsSelect" class="native-select" data-enhance="custom-select">
+                  <option>1</option><option>2</option><option>3</option><option>4</option>
+                  <option selected>5</option><option>6</option><option>7</option><option>8</option>
+                  <option>9</option><option>10</option>
+                </select>
+              </label>
+              <label>
+                <span>Topic</span>
+                <select id="topicSelect" class="native-select" data-enhance="custom-select"></select>
+              </label>
+              <label>
+                <span>Mode</span>
+                <select id="modeSelect" class="native-select" data-enhance="custom-select">
+                  <option value="solve" selected>Solve</option>
+                  <option value="hint">Hint</option>
+                  <option value="generate">Generate</option>
+                  <option value="practice">Practice</option>
+                </select>
+              </label>
+              <label>
+                <span>Problems</span>
+                <select id="countSelect" class="native-select" data-enhance="custom-select">
+                  <option>1</option><option>2</option><option>3</option><option>4</option><option>5</option>
+                </select>
+              </label>
+              <button id="genBtn" class="btn ghost">Generate</button>
+            </div>
+
+            <p class="muted">Write your problem or click “Generate”.</p>
+            <textarea id="aiInput" placeholder="Example: Find 25% of 240 or 'Area of a circle with r=7'"></textarea>
+
+            <div class="ai-buttons">
+              <button id="solveBtn" class="btn primary">Solve</button>
+              <button id="clearAi" class="btn ghost">Clear</button>
+            </div>
+
+            <div class="ai-meta">
+              <p><strong>Detected Topic:</strong> <span id="detectedTopic">—</span></p>
+              <p><strong>Formula Used:</strong> <span id="usedFormula">—</span></p>
+            </div>
+          </div>
+        </section>
+      </main>
+    </section>
+
+    <!-- ============ RIGHT (35%) ============ -->
+    <section class="right-panel">
+      <div class="output">
+        <div class="result-card">
+          <h2>Final Answer</h2>
+          <output id="resultOutput">—</output>
+        </div>
+
+        <div class="steps-card">
+          <h3>Step-by-Step Solution</h3>
+          <pre id="stepsBox">No steps yet.</pre>
+        </div>
+
+        <div class="notes-card">
+          <h3>Notes / Formula</h3>
+          <div id="notesBox">—</div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Floating PWA Install -->
+  <button id="installBtn" class="install-fab hidden">Install</button>
+
+  <!-- Optional click sound -->
+  <audio id="clickSfx" src="assets/click.mp3"></audio>
+
+  <!-- JS -->
+  <script src="script.js?v=4"></script>
+
+  <!-- Download / Install CTA -->
+<button id="installBtn" class="download-cta hidden" aria-label="Install app">
+  <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+    <path d="M12 3v10m0 0l-4-4m4 4l4-4M5 21h14a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2"/>
+  </svg>
+  <span>Download App</span>
+</button>
+</body>
+</html>
